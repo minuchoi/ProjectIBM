@@ -128,6 +128,7 @@ def page2(df):
                 ]
             ), className="six columns"),
         html.Br(),
+        html.Br(),
         html.Div(id='my-output'),
 
     ])
