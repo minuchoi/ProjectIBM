@@ -144,4 +144,4 @@ def print_row_id(input_value):
         return plot_map(starting_location[0], destination[0])
 
 if __name__ == "__main__":
-    app.run_server(host="0.0.0.0", port=8888, debug=True)
+    app.run_server(host="0.0.0.0", port=80, debug=True)
