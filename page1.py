@@ -64,56 +64,6 @@ def pie_chart(labels, values, colours, title):
     return graph
 
 
-def load_type_pie():
-    file = open('deliveries.csv')
-
-    csv_file = csv.reader(file)
-
-    labels = ['Tarmac', 'Cement']
-    tarmac_no = 0
-    cement_no = 0
-
-    for value in csv_file:
-        if value[2] == 'Tarmac':
-            tarmac_no += 1
-        elif value[2] == 'Cement':
-            cement_no += 1
-        else:
-            pass
-
-    values = [tarmac_no, cement_no]
-
-    colours = ['red', 'blue']
-
-    return pie_chart(labels, values, colours, "Types of Loads")
-
-
-def load_effectiveness_pie():
-    file = open('deliveries.csv')
-
-    csv_file = csv.reader(file)
-
-    labels = ['Danger', 'Warning', 'Safe']
-    safe_no = 0
-    warning_no = 0
-    danger_no = 0
-
-    for value in csv_file:
-        if value[6] == 'Safe':
-            safe_no += 1
-        elif value[6] == 'Warning':
-            warning_no += 1
-        elif value[6] == 'Danger':
-            danger_no += 1
-        else:
-            pass
-
-    colours = ['red', 'yellow', 'green']
-
-    values = [danger_no, warning_no, safe_no]
-
-    return pie_chart(labels, values, colours, "Load Effectiveness")
-
 
 def title(date):
     row = dbc.Row(
@@ -136,9 +86,8 @@ def cards():
                 [
                     dbc.CardBody(
                         [
-                            html.H4(id='card_title_1', children=['Card Title 1'], className='card-title',
-                                    style=CARD_TEXT_STYLE),
-                            html.P(id='card_text_1', children=['Sample text.'], style=CARD_TEXT_STYLE),
+                            html.H4(id='card_title_1', className='card-title', style=CARD_TEXT_STYLE),
+                            html.P(id='card_text_1', children=['Today\'s Deliveries'], style=CARD_TEXT_STYLE),
                         ]
                     )
                 ]
@@ -150,8 +99,8 @@ def cards():
                 [
                     dbc.CardBody(
                         [
-                            html.H4('Card Title 2', className='card-title', style=CARD_TEXT_STYLE),
-                            html.P('Sample text.', style=CARD_TEXT_STYLE),
+                            html.H4(id='card_title_2', className='card-title', style=CARD_TEXT_STYLE),
+                            html.P('Safe Loads.', style=CARD_TEXT_STYLE),
                         ]
                     ),
                 ]
@@ -164,8 +113,8 @@ def cards():
                 [
                     dbc.CardBody(
                         [
-                            html.H4('Card Title 3', className='card-title', style=CARD_TEXT_STYLE),
-                            html.P('Sample text.', style=CARD_TEXT_STYLE),
+                            html.H4(id='card_title_3', className='card-title', style=CARD_TEXT_STYLE),
+                            html.P('Unlikely Loads', style=CARD_TEXT_STYLE),
                         ]
                     ),
                 ]
@@ -178,8 +127,8 @@ def cards():
                 [
                     dbc.CardBody(
                         [
-                            html.H4('Card Title 4', className='card-title', style=CARD_TEXT_STYLE),
-                            html.P('Sample text.', style=CARD_TEXT_STYLE),
+                            html.H4(id='card_title_4', className='card-title', style=CARD_TEXT_STYLE),
+                            html.P('Loads in Danger', style=CARD_TEXT_STYLE),
                         ]
                     ),
                 ]
@@ -190,11 +139,13 @@ def cards():
     return row
 
 
-def graphs_testing():
+def graphs_testing(data):
     row = dbc.Row(
         [
-            dbc.Col(load_type_pie(), md=6),
-            dbc.Col(load_effectiveness_pie(), md=6)
+            dbc.Col(pie_chart(['Tarmac', 'Cement'], data[5:], ['red', 'blue'] ,"Types of Loads"), md=6),
+            dbc.Col(
+                pie_chart(['Safe', 'Warning', 'Danger'], data[2:5], ['green', 'yellow', 'red'], "Load Effectiveness"),
+                md=6)
         ]
     )
     return row
@@ -206,22 +157,20 @@ def page1():
         [
             title(testing),
             html.Hr(),
-            cards(),
-            graphs_testing(),
-            html.Div(id='testing_output', children=f'{testing}'),
+            cards()
         ], id='page_output'
     )
     return contents
 
 
-def page1_testing(selected_date):
+def page1_testing(data):
+    selected_date = data[0]
     contents = html.Div(
         [
             title(selected_date),
             html.Hr(),
             cards(),
-            graphs_testing(),
-            html.Div(id='testing_output2', children=f'{selected_date}'),
+            graphs_testing(data)
         ],
         style=CONTENT_STYLE
     )

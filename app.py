@@ -87,24 +87,45 @@ def render_page_content(pathname):
 
 
 @app.callback(
-    Output(component_id='page_output', component_property='children'),
+    [Output(component_id='page_output', component_property='children'),
+     Output(component_id='card_title_1', component_property='children'),
+     Output(component_id='card_title_2', component_property='children'),
+     Output(component_id='card_title_3', component_property='children'),
+     Output(component_id='card_title_4', component_property='children'),],
     [Input(component_id='date-picker-single', component_property='date')]
 )
 def testing_date(date):
-    file = open('deliveries.csv')
-
-    csv_file = csv.reader(file)
+    df = pd.read_csv('deliveries.csv')
 
     date = datetime.strptime(re.split('T| ', date)[0], '%Y-%m-%d')
     date_string = date.strftime('%Y-%m-%d')
 
-    selected_deliveries_id = []
+    chosen_date = df.Date == date_string
 
-    for value in csv_file:
-        if (value[3][0:10]) == date_string:
-            selected_deliveries_id.append(value[0])
+    safe_loads = df.Effectiveness == "Safe"
+    warning_loads = df.Effectiveness == "Warning"
+    danger_loads = df.Effectiveness == "Danger"
 
-    return page1_testing(date)
+    cement = df.LoadType == "Cement"
+    tarmac = df.LoadType == "Tarmac"
+
+    filter1 = chosen_date & safe_loads
+    filter2 = chosen_date & warning_loads
+    filter3 = chosen_date & danger_loads
+    filter4 = chosen_date & cement
+    filter5 = chosen_date & tarmac
+
+    deliveries_today = len(df[chosen_date].index)
+    number_of_safe = len(df[filter1].index)
+    number_of_warning = len(df[filter2].index)
+    number_of_danger = len(df[filter3].index)
+    number_of_cement = len(df[filter4].index)
+    number_of_tarmac = len(df[filter5].index)
+
+    values = [date, deliveries_today, number_of_safe, number_of_warning, number_of_danger, number_of_tarmac, number_of_cement]
+
+    return page1_testing(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}"
+
 
 
 if __name__ == "__main__":
