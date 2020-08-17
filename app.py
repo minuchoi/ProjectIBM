@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output, State
 import dash_table as dt
 import pandas as pd
 from page1 import page1, page1_testing
+from page2 import page2
 import csv
 import re
 from datetime import datetime
@@ -41,8 +42,8 @@ sidebar = html.Div(
         ),
         dbc.Nav(
             [
-                dbc.NavLink("Page 1", href="/page-1", id="page-1-link"),
-                dbc.NavLink("Page 2", href="/page-2", id="page-2-link"),
+                dbc.NavLink("Home", href="/page-1", id="page-1-link"),
+                dbc.NavLink("Table", href="/page-2", id="page-2-link"),
                 dbc.NavLink("Page 3", href="/page-3", id="page-3-link"),
             ],
             vertical=True,
@@ -73,7 +74,7 @@ def render_page_content(pathname):
     if pathname in ["/", "/page-1"]:
         return page1()
     elif pathname == "/page-2":
-        return "Page 2"
+        return page2(df=pd.read_csv('deliveries.csv'))
     elif pathname == "/page-3":
         return "Page 3"
     # If the user tries to reach a different page, return a 404 message
@@ -121,11 +122,11 @@ def testing_date(date):
     number_of_danger = len(df[filter3].index)
     number_of_cement = len(df[filter4].index)
     number_of_tarmac = len(df[filter5].index)
+    times = df[chosen_date]
 
-    values = [date, deliveries_today, number_of_safe, number_of_warning, number_of_danger, number_of_tarmac, number_of_cement]
+    values = [date, deliveries_today, number_of_safe, number_of_warning, number_of_danger, number_of_tarmac, number_of_cement, times]
 
     return page1_testing(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}"
-
 
 
 if __name__ == "__main__":

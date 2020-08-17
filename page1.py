@@ -64,7 +64,6 @@ def pie_chart(labels, values, colours, title):
     return graph
 
 
-
 def title(date):
     row = dbc.Row(
         [
@@ -139,15 +138,65 @@ def cards():
     return row
 
 
-def graphs_testing(data):
+def pie_charts(data):
     row = dbc.Row(
         [
-            dbc.Col(pie_chart(['Tarmac', 'Cement'], data[5:], ['red', 'blue'] ,"Types of Loads"), md=6),
+            dbc.Col(pie_chart(['Tarmac', 'Cement'], data[5:], ['red', 'blue'], "Types of Loads"), md=6),
             dbc.Col(
                 pie_chart(['Safe', 'Warning', 'Danger'], data[2:5], ['green', 'yellow', 'red'], "Load Effectiveness"),
-                md=6)
+                md=6),
         ]
     )
+    return row
+
+
+def bar_chart(data):
+    times = data[7]
+
+    times_list = times['Time'].tolist()
+
+    dict_of_hours = {
+        "0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0, "12": 0,
+        "13": 0,
+        "14": 0, "15": 0, "16": 0, "17": 0, "18": 0, "19": 0, "20": 0, "21": 0, "22": 0, "23": 0
+    }
+
+    for values in times_list:
+        hour = values.rsplit(":")
+        dict_of_hours[hour[0]] += 1
+
+    x = ['0:00-0:59', '1:00-1:59', '2:00-2:59', '3:00-3:59', '4:00-4:59', '5:00-5:59', '6:00-6:59', '7:00-7:59', '8:00-8:59', '9:00-9:59', '10:00-10:59', '11:00-11:59', '12:00-12:59', '13:00-13:59', '14:00-14:59', '15:00-15:59', '16:00-16:59', '17:00-17:59', '18:00-18:59', '19:00-19:59', '20:00-20:59', '21:00-21:59', '22:00-22:59', '23:00-23:59']
+
+    y = [i for i in dict_of_hours.values()]
+
+    fig = go.Figure(
+        data=[go.Bar(
+            x=x, y=y,
+            textposition='auto',
+
+        )])
+    fig.update_layout(
+        title='Delivery Times',
+        xaxis_tickfont_size=14,
+        yaxis=dict(
+            title='Quantity',
+            titlefont_size=16,
+            tickfont_size=14,
+        ),
+        xaxis=dict(
+            title='Time',
+            titlefont_size=16,
+            tickfont_size=14,
+        )
+
+    )
+
+    graph = dcc.Graph(id='bar_graph', figure=fig)
+
+    row = dbc.Row(
+        dbc.Col(graph, md=12)
+    )
+
     return row
 
 
@@ -170,7 +219,8 @@ def page1_testing(data):
             title(selected_date),
             html.Hr(),
             cards(),
-            graphs_testing(data)
+            pie_charts(data),
+            bar_chart(data)
         ],
         style=CONTENT_STYLE
     )
