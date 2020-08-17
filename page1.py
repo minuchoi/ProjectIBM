@@ -209,8 +209,7 @@ def page1():
             cards(),
             graphs_testing(),
             html.Div(id='testing_output', children=f'{testing}'),
-        ], id='page_output',
-        style=CONTENT_STYLE
+        ], id='page_output'
     )
     return contents
 
@@ -223,7 +222,7 @@ def page1_testing(selected_date):
             cards(),
             graphs_testing(),
             html.Div(id='testing_output2', children=f'{selected_date}'),
-        ], id='page_output2',
+        ],
         style=CONTENT_STYLE
     )
     return contents

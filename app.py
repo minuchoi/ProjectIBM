@@ -87,8 +87,7 @@ def render_page_content(pathname):
 
 
 @app.callback(
-    [Output(component_id='page_output', component_property='children'),
-     Output(component_id='testing_output', component_property='children')],
+    Output(component_id='page_output', component_property='children'),
     [Input(component_id='date-picker-single', component_property='date')]
 )
 def testing_date(date):
@@ -105,7 +104,7 @@ def testing_date(date):
         if (value[3][0:10]) == date_string:
             selected_deliveries_id.append(value[0])
 
-    return page1_testing(date), f"Output: {date}"
+    return page1_testing(date)
 
 
 if __name__ == "__main__":
