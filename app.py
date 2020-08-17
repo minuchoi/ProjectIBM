@@ -7,12 +7,14 @@ from dash.dependencies import Input, Output, State
 import dash_table as dt
 import pandas as pd
 from page1 import page1, page1_testing
-from page2 import page2
+from page2 import page2, plot_map
 import csv
 import re
 from datetime import datetime
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+
+df = pd.read_csv('deliveries.csv')
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
@@ -128,6 +130,18 @@ def testing_date(date):
 
     return page1_testing(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}"
 
+
+@app.callback(
+    Output(component_id='my-output', component_property='children'),
+    [Input('delivery-table', 'selected_rows')]
+)
+def print_row_id(input_value):
+    if not input_value:
+        pass
+    else:
+        starting_location = df.iloc[input_value, 5].values
+        destination = df.iloc[input_value, 6].values
+        return plot_map(starting_location[0], destination[0])
 
 if __name__ == "__main__":
     app.run_server(host="0.0.0.0", port=8888, debug=True)
