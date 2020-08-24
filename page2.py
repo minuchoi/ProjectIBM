@@ -133,6 +133,15 @@ def page2(df):
                     {
                         'if': {'row_index': 'odd'},
                         'backgroundColor': 'rgb(248, 248, 248)'
+                    },
+                    {
+                        'if': {
+                            'filter_query': '{Effectiveness} = Danger',
+                            'column_id': 'Effectiveness'
+                        },
+                        'backgroundColor': 'red',
+                        'color': 'white'
+
                     }
                 ],
                 style_header={
