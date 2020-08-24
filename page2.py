@@ -11,7 +11,6 @@ token = "pk.eyJ1IjoibWludXRvciIsImEiOiJja2NvdnlwMWMwMnlyMnpsZ3JsM3BrdGs2In0.XD4s
 
 
 def get_location(postcode):
-    postcode = postcode.lower()
     url = 'https://api.postcodes.io/postcodes/' + str(postcode)
     with urllib.request.urlopen(url) as response:
         testing = json.load(response)
@@ -19,19 +18,19 @@ def get_location(postcode):
         long = results[6]
         lat = results[7]
 
-    return lat, long
+    return lat, long, postcode
 
 
 # http://postcodes.io/
 
 def map_locations(home, dest):
-    initial_lat, initial_lon = get_location(home)
-    final_lat, final_lon = get_location(dest)
-    return initial_lat, initial_lon, final_lat, final_lon
+    initial_lat, initial_lon, home_postcode = get_location(home)
+    final_lat, final_lon, dest_postcode = get_location(dest)
+    return initial_lat, initial_lon, final_lat, final_lon, home_postcode, dest_postcode
 
 
 def get_route(home, dest):
-    initial_lat, initial_lon, final_lat, final_lon = map_locations(home, dest)
+    initial_lat, initial_lon, final_lat, final_lon, home_postcode, dest_postcode = map_locations(home, dest)
 
     mapurl = 'https://api.mapbox.com/directions/v5/mapbox/driving-traffic/' + str(initial_lon) + ',' + str(
         initial_lat) + ';' + str(final_lon) + ',' + str(
@@ -55,16 +54,33 @@ def get_route(home, dest):
                 if name == "duration":
                     duration = value
         destination = map_js['waypoints']
+        counter = 0
         for waypoints in destination:
             for item in waypoints.items():
                 if item[0] == 'name':
-                    destination_names.append(item[1])
+                    if item[1] != "":
+                        destination_names.append(item[1])
+                        counter += 1
+                    elif counter == 0:
+                        destination_names.append(home_postcode)
+                        counter += 1
+                    else:
+                        destination_names.append(dest_postcode)
 
     return lats, lons, mapurl, duration, destination_names
 
 
-def plot_map(home, dest):
+def plot_map(home, dest, eff):
     lats, lons, map_url, duration, destination_names = get_route(home, dest)
+
+    colour = ""
+
+    if eff == 'Safe':
+        colour += 'green'
+    elif eff == 'Warning':
+        colour += 'orange'
+    else:
+        colour += 'red'
 
     eta = str(datetime.timedelta(seconds=int(duration)))
 
@@ -75,7 +91,7 @@ def plot_map(home, dest):
         lat=lats,
         lon=lons,
         mode='lines',
-        line=dict(width=2, color='red'),
+        line=dict(width=2, color=colour),
         marker=dict(
             size=5,
         ),

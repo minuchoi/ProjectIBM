@@ -78,7 +78,7 @@ def render_page_content(pathname):
     elif pathname == "/page-2":
         return page2(df=pd.read_csv('deliveries.csv'))
     elif pathname == "/page-3":
-        return "Page 3"
+        return 'Space'
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
@@ -94,7 +94,7 @@ def render_page_content(pathname):
      Output(component_id='card_title_1', component_property='children'),
      Output(component_id='card_title_2', component_property='children'),
      Output(component_id='card_title_3', component_property='children'),
-     Output(component_id='card_title_4', component_property='children'),],
+     Output(component_id='card_title_4', component_property='children')],
     [Input(component_id='date-picker-single', component_property='date')]
 )
 def testing_date(date):
@@ -126,9 +126,11 @@ def testing_date(date):
     number_of_tarmac = len(df[filter5].index)
     times = df[chosen_date]
 
-    values = [date, deliveries_today, number_of_safe, number_of_warning, number_of_danger, number_of_tarmac, number_of_cement, times]
+    values = [date, deliveries_today, number_of_safe, number_of_warning, number_of_danger, number_of_tarmac,
+              number_of_cement, times]
 
-    return page1_testing(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}"
+    return page1_testing(
+        values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}"
 
 
 @app.callback(
@@ -141,7 +143,9 @@ def print_row_id(input_value):
     else:
         starting_location = df.iloc[input_value, 5].values
         destination = df.iloc[input_value, 6].values
-        return plot_map(starting_location[0], destination[0])
+        effectiveness = df.iloc[input_value, 7].values
+        return plot_map(starting_location[0], destination[0], effectiveness)
+
 
 if __name__ == "__main__":
     app.run_server(host="0.0.0.0", port=80, debug=True)

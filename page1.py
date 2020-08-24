@@ -87,6 +87,7 @@ def cards():
                         [
                             html.H4(id='card_title_1', className='card-title', style=CARD_TEXT_STYLE),
                             html.P(id='card_text_1', children=['Today\'s Deliveries'], style=CARD_TEXT_STYLE),
+                            dbc.Button("View", color="primary", block=True, id="deliveries-button")
                         ]
                     )
                 ]
@@ -100,6 +101,7 @@ def cards():
                         [
                             html.H4(id='card_title_2', className='card-title', style=CARD_TEXT_STYLE),
                             html.P('Safe Loads.', style=CARD_TEXT_STYLE),
+                            dbc.Button("View", color="primary", block=True, id='safe-button')
                         ]
                     ),
                 ]
@@ -114,6 +116,7 @@ def cards():
                         [
                             html.H4(id='card_title_3', className='card-title', style=CARD_TEXT_STYLE),
                             html.P('Unlikely Loads', style=CARD_TEXT_STYLE),
+                            dbc.Button("View", color="primary", block=True, id='warning-button')
                         ]
                     ),
                 ]
@@ -128,6 +131,7 @@ def cards():
                         [
                             html.H4(id='card_title_4', className='card-title', style=CARD_TEXT_STYLE),
                             html.P('Loads in Danger', style=CARD_TEXT_STYLE),
+                            dbc.Button("View", color="primary", block=True, id='danger-button')
                         ]
                     ),
                 ]
@@ -221,3 +225,5 @@ def page1_testing(data):
         style=CONTENT_STYLE
     )
     return contents
+
+
