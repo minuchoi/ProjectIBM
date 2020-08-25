@@ -20,14 +20,14 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 
 
 @app.callback(
-    [Output(f"page-{i}-link", "active") for i in range(1, 4)],
+    [Output(f"page-{i}-link", "active") for i in range(1, 3)],
     [Input("url", "pathname")],
 )
 def toggle_active_links(pathname):
     if pathname == "/":
         # Treat page 1 as the homepage / index
         return True, False, False
-    return [pathname == f"/page-{i}" for i in range(1, 4)]
+    return [pathname == f"/page-{i}" for i in range(1, 3)]
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
@@ -36,8 +36,7 @@ def render_page_content(pathname):
         return page1()
     elif pathname == "/page-2":
         return page2(df=pd.read_csv('deliveries.csv'))
-    elif pathname == "/page-3":
-        return 'Space'
+
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
@@ -53,10 +52,15 @@ def render_page_content(pathname):
      Output(component_id='card_title_1', component_property='children'),
      Output(component_id='card_title_2', component_property='children'),
      Output(component_id='card_title_3', component_property='children'),
-     Output(component_id='card_title_4', component_property='children')],
-    [Input(component_id='date-picker-single', component_property='date')]
+     Output(component_id='card_title_4', component_property='children'),
+     Output('container-button-timestamp', 'children')],
+    [Input(component_id='date-picker-single', component_property='date'),
+     Input('deliveries-button', 'n_clicks'),
+     Input('safe-button', 'n_clicks'),
+     Input('warning-button', 'n_clicks'),
+     Input('danger-button', 'n_clicks')]
 )
-def date_input(date):
+def date_input(date, btn1, btn2, btn3, btn4):
     date = datetime.strptime(re.split('T| ', date)[0], '%Y-%m-%d')
     date_string = date.strftime('%Y-%m-%d')
 
@@ -86,7 +90,19 @@ def date_input(date):
     values = [date, deliveries_today, number_of_safe, number_of_warning, number_of_danger, number_of_tarmac,
               number_of_cement, times]
 
-    return page1_testing(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}"
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    if 'deliveries-button' in changed_id:
+        msg = page2(df[chosen_date])
+    elif 'safe-button' in changed_id:
+        msg = page2(df[filter1])
+    elif 'warning-button' in changed_id:
+        msg = page2(df[filter2])
+    elif 'danger-button' in changed_id:
+        msg = page2(df[filter3])
+    else:
+        msg = ''
+
+    return page1_testing(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}", html.Div(msg)
 
 
 @app.callback(
@@ -101,6 +117,7 @@ def print_row_id(input_value):
         destination = df.iloc[input_value, 6].values
         effectiveness = df.iloc[input_value, 7].values
         return plot_map(starting_location[0], destination[0], effectiveness)
+
 
 
 if __name__ == "__main__":

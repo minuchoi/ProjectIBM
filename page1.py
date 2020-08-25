@@ -206,7 +206,8 @@ def page1():
         [
             title(testing),
             html.Hr(),
-            cards()
+            cards(),
+            html.Div(id='container-button-timestamp', children="")
         ], id='page_output'
     )
     return contents
@@ -220,7 +221,8 @@ def page1_testing(data):
             html.Hr(),
             cards(),
             pie_charts(data),
-            bar_chart(data)
+            bar_chart(data),
+            html.Div(id='container-button-timestamp', children="")
         ],
         style=CONTENT_STYLE
     )
