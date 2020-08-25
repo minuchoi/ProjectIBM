@@ -4,8 +4,8 @@ import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 import dash_table as dt
 import pandas as pd
-from page1 import page1, page1_testing, selected_table
-from page2 import page2, plot_map
+from page1 import page1, page1_testing
+from page2 import delivery_table, plot_map
 from sidebar import *
 import re
 from datetime import datetime
@@ -44,7 +44,7 @@ def render_page_content(pathname):
     if pathname in ["/", "/page-1"]:
         return page1()
     elif pathname == "/page-2":
-        return page2(df=pd.read_csv('deliveries.csv'))
+        return delivery_table(df)
 
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
@@ -101,13 +101,13 @@ def date_input(date, btn1, btn2, btn3, btn4):
 
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if 'deliveries-button' in changed_id:
-        msg = selected_table(df[chosen_date])
+        msg = delivery_table(df[chosen_date])
     elif 'safe-button' in changed_id:
-        msg = selected_table(df[filter1])
+        msg = delivery_table(df[filter1])
     elif 'warning-button' in changed_id:
-        msg = selected_table(df[filter2])
+        msg = delivery_table(df[filter2])
     elif 'danger-button' in changed_id:
-        msg = selected_table(df[filter3])
+        msg = delivery_table(df[filter3])
     else:
         msg = ''
 
@@ -116,21 +116,8 @@ def date_input(date, btn1, btn2, btn3, btn4):
 
 @app.callback(
     Output(component_id='my-output', component_property='children'),
-    [Input('delivery-table', 'selected_rows')]
-)
-def plot_selected_map(input_value):
-    if not input_value:
-        pass
-    else:
-        starting_location = df.iloc[input_value, 5].values
-        destination = df.iloc[input_value, 6].values
-        effectiveness = df.iloc[input_value, 7].values
-        return plot_map(starting_location[0], destination[0], effectiveness)
-
-@app.callback(
-    Output(component_id='my-output2', component_property='children'),
-    [Input('selected-table', 'selected_rows'),
-     Input('selected-table', 'data')]
+    [Input('delivery-table', 'selected_rows'),
+     Input('delivery-table', 'data')]
 )
 def plot_selected_map(input_value, data):
     if not input_value:

@@ -114,7 +114,7 @@ def plot_map(home, dest, eff):
     return map_display
 
 
-def page2(df):
+def delivery_table(df):
     table = html.Div([
         html.Div(
             dt.DataTable(
