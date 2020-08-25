@@ -26,7 +26,7 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 def toggle_active_links(pathname):
     if pathname == "/":
         # Treat page 1 as the homepage / index
-        return True, False, False
+        return True, False
     return [pathname == f"/page-{i}" for i in range(1, 3)]
 
 
