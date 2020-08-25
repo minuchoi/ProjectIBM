@@ -4,13 +4,22 @@ import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 import dash_table as dt
 import pandas as pd
-from page1 import page1, page1_testing
+from page1 import page1, page1_testing, selected_table
 from page2 import page2, plot_map
 from sidebar import *
 import re
 from datetime import datetime
 
+VALID_USERNAME_PASSWORD_PAIRS = {
+    'hello': 'world'
+}
+
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+
+auth = dash_auth.BasicAuth(
+    app,
+    VALID_USERNAME_PASSWORD_PAIRS
+)
 
 df = pd.read_csv('deliveries.csv')
 
@@ -92,13 +101,13 @@ def date_input(date, btn1, btn2, btn3, btn4):
 
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if 'deliveries-button' in changed_id:
-        msg = page2(df[chosen_date])
+        msg = selected_table(df[chosen_date])
     elif 'safe-button' in changed_id:
-        msg = page2(df[filter1])
+        msg = selected_table(df[filter1])
     elif 'warning-button' in changed_id:
-        msg = page2(df[filter2])
+        msg = selected_table(df[filter2])
     elif 'danger-button' in changed_id:
-        msg = page2(df[filter3])
+        msg = selected_table(df[filter3])
     else:
         msg = ''
 
@@ -109,7 +118,7 @@ def date_input(date, btn1, btn2, btn3, btn4):
     Output(component_id='my-output', component_property='children'),
     [Input('delivery-table', 'selected_rows')]
 )
-def print_row_id(input_value):
+def plot_selected_map(input_value):
     if not input_value:
         pass
     else:
@@ -118,6 +127,20 @@ def print_row_id(input_value):
         effectiveness = df.iloc[input_value, 7].values
         return plot_map(starting_location[0], destination[0], effectiveness)
 
+@app.callback(
+    Output(component_id='my-output2', component_property='children'),
+    [Input('selected-table', 'selected_rows'),
+     Input('selected-table', 'data')]
+)
+def plot_selected_map(input_value, data):
+    if not input_value:
+        pass
+    else:
+        df2 = pd.DataFrame(data)
+        starting_location = df2.iloc[input_value, 5].values
+        destination = df2.iloc[input_value, 6].values
+        effectiveness = df2.iloc[input_value, 7].values
+        return plot_map(starting_location[0], destination[0], effectiveness)
 
 
 if __name__ == "__main__":
