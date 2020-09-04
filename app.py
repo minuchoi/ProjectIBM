@@ -10,18 +10,19 @@ from sidebar import *
 import re
 from datetime import datetime
 
+
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+
+df = pd.read_csv('deliveries.csv')
+
 VALID_USERNAME_PASSWORD_PAIRS = {
     'hello': 'world'
 }
-
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
 auth = dash_auth.BasicAuth(
     app,
     VALID_USERNAME_PASSWORD_PAIRS
 )
-
-df = pd.read_csv('deliveries.csv')
 
 content = html.Div(id="page-content", style=CONTENT_STYLE)
 
@@ -80,7 +81,7 @@ def date_input(date, btn1, btn2, btn3, btn4):
     danger_loads = df.Effectiveness == "Danger"
 
     cement = df.LoadType == "Cement"
-    tarmac = df.LoadType == "Tarmac"
+    tarmac = df.LoadType == "Asphalt"
 
     filter1 = chosen_date & safe_loads
     filter2 = chosen_date & warning_loads
@@ -123,10 +124,10 @@ def plot_selected_map(input_value, data):
     if not input_value:
         pass
     else:
-        df2 = pd.DataFrame(data)
-        starting_location = df2.iloc[input_value, 5].values
-        destination = df2.iloc[input_value, 6].values
-        effectiveness = df2.iloc[input_value, 7].values
+        filtered_df = pd.DataFrame(data)
+        starting_location = filtered_df.iloc[input_value, 5].values
+        destination = filtered_df.iloc[input_value, 6].values
+        effectiveness = filtered_df.iloc[input_value, 7].values
         return plot_map(starting_location[0], destination[0], effectiveness)
 
 

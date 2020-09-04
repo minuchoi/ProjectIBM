@@ -146,7 +146,7 @@ def cards():
 def pie_charts(data):
     row = dbc.Row(
         [
-            dbc.Col(pie_chart(['Tarmac', 'Cement'], data[5:], ['red', 'blue'], "Types of Loads"), md=6),
+            dbc.Col(pie_chart(['Asphalt', 'Cement'], data[5:], ['red', 'blue'], "Types of Loads"), md=6),
             dbc.Col(
                 pie_chart(['Safe', 'Warning', 'Danger'], data[2:5], ['green', 'yellow', 'red'], "Load Effectiveness"),
                 md=6),
