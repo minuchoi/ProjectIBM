@@ -99,17 +99,17 @@ def date_input(date, btn1, btn2, btn3, btn4):
 
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if 'deliveries-button' in changed_id:
-        msg = delivery_table(df[chosen_date])
+        filtered_table = delivery_table(df[chosen_date])
     elif 'safe-button' in changed_id:
-        msg = delivery_table(df[filter1])
+        filtered_table = delivery_table(df[filter1])
     elif 'warning-button' in changed_id:
-        msg = delivery_table(df[filter2])
+        filtered_table = delivery_table(df[filter2])
     elif 'danger-button' in changed_id:
-        msg = delivery_table(df[filter3])
+        filtered_table = delivery_table(df[filter3])
     else:
-        msg = ''
+        filtered_table = ''
 
-    return page1_load(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}", html.Div(msg)
+    return page1_load(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}", html.Div(filtered_table)
 
 
 @app.callback(
