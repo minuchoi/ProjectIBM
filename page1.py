@@ -200,10 +200,9 @@ def bar_chart(data):
 
 
 def page1_template():
-    testing = datetime.today()
     contents = html.Div(
         [
-            title(testing),
+            title(datetime.today()),
             html.Hr(),
             cards(),
             html.Div(id='container-button-timestamp', children="")
