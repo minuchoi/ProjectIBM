@@ -4,7 +4,6 @@ import dash_html_components as html
 import dash_core_components as dcc
 import plotly.graph_objects as go
 import datetime
-import pandas as pd
 import dash_table as dt
 
 token = "pk.eyJ1IjoibWludXRvciIsImEiOiJja2NvdnlwMWMwMnlyMnpsZ3JsM3BrdGs2In0.XD4skMgplLoswXjrGbbQ-g"

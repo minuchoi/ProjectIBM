@@ -1,10 +1,9 @@
 import dash
 import dash_auth
 import dash_core_components as dcc
-from dash.dependencies import Input, Output, State
-import dash_table as dt
+from dash.dependencies import Input, Output
 import pandas as pd
-from page1 import page1, page1_testing
+from page1 import page1_template, page1_load
 from page2 import delivery_table, plot_map
 from sidebar import *
 import re
@@ -15,13 +14,13 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_e
 
 df = pd.read_csv('deliveries.csv')
 
-VALID_USERNAME_PASSWORD_PAIRS = {
-    'hello': 'world'
+username_password_pair = {
+    'username': 'password'
 }
 
 auth = dash_auth.BasicAuth(
     app,
-    VALID_USERNAME_PASSWORD_PAIRS
+    username_password_pair
 )
 
 content = html.Div(id="page-content", style=CONTENT_STYLE)
@@ -35,7 +34,6 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 )
 def toggle_active_links(pathname):
     if pathname == "/":
-        # Treat page 1 as the homepage / index
         return True, False
     return [pathname == f"/page-{i}" for i in range(1, 3)]
 
@@ -43,11 +41,10 @@ def toggle_active_links(pathname):
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname in ["/", "/page-1"]:
-        return page1()
+        return page1_template()
     elif pathname == "/page-2":
         return delivery_table(df)
 
-    # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
             html.H1("404: Not found", className="text-danger"),
@@ -112,7 +109,7 @@ def date_input(date, btn1, btn2, btn3, btn4):
     else:
         msg = ''
 
-    return page1_testing(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}", html.Div(msg)
+    return page1_load(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}", html.Div(msg)
 
 
 @app.callback(

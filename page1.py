@@ -1,11 +1,9 @@
-import csv
 import dash_core_components as dcc
 import plotly.graph_objects as go
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from datetime import datetime
 import pandas as pd
-import dash_table as dt
 
 df = pd.read_csv('deliveries.csv')
 
@@ -201,7 +199,7 @@ def bar_chart(data):
     return row
 
 
-def page1():
+def page1_template():
     testing = datetime.today()
     contents = html.Div(
         [
@@ -214,7 +212,7 @@ def page1():
     return contents
 
 
-def page1_testing(data):
+def page1_load(data):
     selected_date = data[0]
     contents = html.Div(
         [
