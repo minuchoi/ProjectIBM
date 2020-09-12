@@ -23,7 +23,7 @@ SIDEBAR_STYLE = {
 
 sidebar = html.Div(
     [
-        html.H3("Cement", className="display-4"),
+        html.H3("Dashboard", className="display-4"),
         html.Hr(),
         html.P(
             "Welcome to the Dashboard!", className="lead"
