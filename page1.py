@@ -44,7 +44,7 @@ def current_date(date):
 
 def date_picker(selected_date):
     date_selector = html.Div(dcc.DatePickerSingle(
-        id='date-picker-single',
+        id='date-picker',
         date=selected_date,
         display_format="DD/MM/YYYY "
     ))
@@ -205,7 +205,7 @@ def page1_template():
             title(datetime.today()),
             html.Hr(),
             cards(),
-            html.Div(id='container-button-timestamp', children="")
+            html.Div(id='table-output', children="")
         ], id='page_output'
     )
     return contents
@@ -220,9 +220,8 @@ def page1_load(data):
             cards(),
             pie_charts(data),
             bar_chart(data),
-            html.Div(id='container-button-timestamp', children="")
-        ],
-        style=CONTENT_STYLE
+            html.Div(id='table-output', children="")
+        ]
     )
     return contents
 

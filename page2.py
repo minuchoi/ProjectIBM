@@ -17,23 +17,21 @@ def get_location(postcode):
         long = results[6]
         lat = results[7]
 
-    return lat, long, postcode
+    return lat, long
 
-
-# http://postcodes.io/
 
 def map_locations(home, dest):
-    initial_lat, initial_lon, home_postcode = get_location(home)
-    final_lat, final_lon, dest_postcode = get_location(dest)
-    return initial_lat, initial_lon, final_lat, final_lon, home_postcode, dest_postcode
+    initial_lat, initial_lon = get_location(home)
+    final_lat, final_lon = get_location(dest)
+    return initial_lat, initial_lon, final_lat, final_lon
 
 
-def get_route(home, dest):
-    initial_lat, initial_lon, final_lat, final_lon, home_postcode, dest_postcode = map_locations(home, dest)
+def get_route(home_postcode, dest_postcode, token):
+    initial_lat, initial_lon, final_lat, final_lon = map_locations(home_postcode, dest_postcode)
 
     mapurl = 'https://api.mapbox.com/directions/v5/mapbox/driving-traffic/' + str(initial_lon) + ',' + str(
         initial_lat) + ';' + str(final_lon) + ',' + str(
-        final_lat) + '?geometries=geojson&access_token=pk.eyJ1IjoibWludXRvciIsImEiOiJja2NvdnlwMWMwMnlyMnpsZ3JsM3BrdGs2In0.XD4skMgplLoswXjrGbbQ-g'
+        final_lat) + '?geometries=geojson&access_token=' + token
 
     lons = []
     lats = []
@@ -153,7 +151,7 @@ def delivery_table(df):
             ), className="six columns"),
         html.Br(),
         html.Br(),
-        html.Div(id='my-output'),
+        html.Div(id='map-output'),
 
     ])
     return table

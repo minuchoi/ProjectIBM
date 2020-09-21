@@ -60,8 +60,8 @@ def render_page_content(pathname):
      Output(component_id='card_title_2', component_property='children'),
      Output(component_id='card_title_3', component_property='children'),
      Output(component_id='card_title_4', component_property='children'),
-     Output('container-button-timestamp', 'children')],
-    [Input(component_id='date-picker-single', component_property='date'),
+     Output('table-output', 'children')],
+    [Input(component_id='date-picker', component_property='date'),
      Input('deliveries-button', 'n_clicks'),
      Input('safe-button', 'n_clicks'),
      Input('warning-button', 'n_clicks'),
@@ -113,7 +113,7 @@ def date_input(date, btn1, btn2, btn3, btn4):
 
 
 @app.callback(
-    Output(component_id='my-output', component_property='children'),
+    Output(component_id='map-output', component_property='children'),
     [Input('delivery-table', 'selected_rows'),
      Input('delivery-table', 'data')]
 )
