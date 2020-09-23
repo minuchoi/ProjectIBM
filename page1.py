@@ -29,7 +29,8 @@ TEXT_STYLE_LEFT = {
 }
 
 
-def current_date(date):
+# Returns the date in a string format.
+def display_date(date):
     day = int(date.strftime('%d'))
 
     if 4 <= day <= 20 or 24 <= day <= 30:
@@ -37,11 +38,12 @@ def current_date(date):
     else:
         suffix = ["st", "nd", "rd"][day % 10 - 1]
 
-    present_day = date.strftime(f'%A %d{suffix} %Y')
+    date_string = date.strftime(f'%A %d{suffix} %Y')
 
-    return present_day
+    return date_string
 
 
+# Produces the date selector on the page.
 def date_picker(selected_date):
     date_selector = html.Div(dcc.DatePickerSingle(
         id='date-picker',
@@ -51,6 +53,7 @@ def date_picker(selected_date):
     return date_selector
 
 
+# Produces the pie charts.
 def pie_chart(labels, values, colours, title):
     fig = go.Figure(data=[go.Pie(labels=labels,
                                  values=[i for i in values],
@@ -63,6 +66,7 @@ def pie_chart(labels, values, colours, title):
     return graph
 
 
+# Produces the header of the page.
 def title(date):
     row = dbc.Row(
         [
@@ -70,13 +74,14 @@ def title(date):
                 ["Date Selector:", date_picker(date)], style=TEXT_STYLE_LEFT
             ),
             dbc.Col(
-                html.H2(current_date(date), style=TEXT_STYLE)
+                html.H2(display_date(date), style=TEXT_STYLE)
             )
         ]
     )
     return row
 
 
+# Produces the cards on the page
 def cards():
     row = dbc.Row([
         dbc.Col(
@@ -141,6 +146,7 @@ def cards():
     return row
 
 
+# Produces the pie charts on the page.
 def pie_charts(data):
     row = dbc.Row(
         [
@@ -153,6 +159,7 @@ def pie_charts(data):
     return row
 
 
+# Produces the bar chart on the page.
 def bar_chart(data):
     times = data[7]
 
@@ -199,6 +206,7 @@ def bar_chart(data):
     return row
 
 
+# Sets the date to the present and initiates the Home page.
 def page1_template():
     contents = html.Div(
         [
@@ -211,6 +219,7 @@ def page1_template():
     return contents
 
 
+# Creates the Home page with the selected date.
 def page1_load(data):
     selected_date = data[0]
     contents = html.Div(
@@ -224,5 +233,3 @@ def page1_load(data):
         ]
     )
     return contents
-
-

@@ -6,9 +6,11 @@ import plotly.graph_objects as go
 import datetime
 import dash_table as dt
 
+# Mapbox token used to access the API
 token = "pk.eyJ1IjoibWludXRvciIsImEiOiJja2NvdnlwMWMwMnlyMnpsZ3JsM3BrdGs2In0.XD4skMgplLoswXjrGbbQ-g"
 
 
+# Converts postcodes to longitude and latitude coordinates.
 def get_location(postcode):
     url = 'https://api.postcodes.io/postcodes/' + str(postcode)
     with urllib.request.urlopen(url) as response:
@@ -20,12 +22,14 @@ def get_location(postcode):
     return lat, long
 
 
+# Converts home and destination postcodes into longitude and latitude coordinates.
 def map_locations(home, dest):
     initial_lat, initial_lon = get_location(home)
     final_lat, final_lon = get_location(dest)
     return initial_lat, initial_lon, final_lat, final_lon
 
 
+# Retrieves the route of the delivery from the Mapbox API.
 def get_route(home_postcode, dest_postcode, token):
     initial_lat, initial_lon, final_lat, final_lon = map_locations(home_postcode, dest_postcode)
 
@@ -67,6 +71,7 @@ def get_route(home_postcode, dest_postcode, token):
     return lats, lons, mapurl, duration, destination_names
 
 
+# Plots the route of the delivery on the map and returns the map.
 def plot_map(home, dest, eff):
     lats, lons, map_url, duration, destination_names = get_route(home, dest)
 
@@ -111,6 +116,7 @@ def plot_map(home, dest, eff):
     return map_display
 
 
+# Converts a Dataframe into a table and displays the table.
 def delivery_table(df):
     table = html.Div([
         html.Div(

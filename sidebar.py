@@ -1,16 +1,14 @@
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 
-# the styles for the main content position it to the right of the sidebar and
-# add some padding.
-
+# Adds padding to the margins.
 CONTENT_STYLE = {
     "margin-left": "18rem",
     "margin-right": "2rem",
     "padding": "2rem 1rem",
 }
 
-# the style arguments for the sidebar. We use position:fixed and a fixed width
+# Sets the style of the sidebar.
 SIDEBAR_STYLE = {
     "position": "fixed",
     "top": 0,
@@ -21,6 +19,7 @@ SIDEBAR_STYLE = {
     "background-color": "#f8f9fa",
 }
 
+# Produces the sidebar on the page.
 sidebar = html.Div(
     [
         html.H3("Dashboard", className="display-4"),

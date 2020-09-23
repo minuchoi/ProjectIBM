@@ -28,6 +28,7 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 
 
+# Callback used to set the homepage.
 @app.callback(
     [Output(f"page-{i}-link", "active") for i in range(1, 3)],
     [Input("url", "pathname")],
@@ -38,6 +39,7 @@ def toggle_active_links(pathname):
     return [pathname == f"/page-{i}" for i in range(1, 3)]
 
 
+# Callback used for navigating between pages.
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname in ["/", "/page-1"]:
@@ -54,6 +56,7 @@ def render_page_content(pathname):
     )
 
 
+# Callback used to load the Home page with its functionalities.
 @app.callback(
     [Output(component_id='page_output', component_property='children'),
      Output(component_id='card_title_1', component_property='children'),
@@ -112,6 +115,7 @@ def date_input(date, btn1, btn2, btn3, btn4):
     return page1_load(values), f"{deliveries_today}", f"{number_of_safe}", f"{number_of_warning}", f"{number_of_danger}", html.Div(filtered_table)
 
 
+# Callback used to plot the maps.
 @app.callback(
     Output(component_id='map-output', component_property='children'),
     [Input('delivery-table', 'selected_rows'),
