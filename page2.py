@@ -6,9 +6,6 @@ import plotly.graph_objects as go
 import datetime
 import dash_table as dt
 
-# Mapbox token used to access the API
-token = "pk.eyJ1IjoibWludXRvciIsImEiOiJja2NvdnlwMWMwMnlyMnpsZ3JsM3BrdGs2In0.XD4skMgplLoswXjrGbbQ-g"
-
 
 # Converts postcodes to longitude and latitude coordinates.
 def get_location(postcode):
@@ -73,7 +70,11 @@ def get_route(home_postcode, dest_postcode, token):
 
 # Plots the route of the delivery on the map and returns the map.
 def plot_map(home, dest, eff):
-    lats, lons, map_url, duration, destination_names = get_route(home, dest)
+
+    # Mapbox token used to access the API
+    token = "pk.eyJ1IjoibWludXRvciIsImEiOiJja2NvdnlwMWMwMnlyMnpsZ3JsM3BrdGs2In0.XD4skMgplLoswXjrGbbQ-g"
+
+    lats, lons, map_url, duration, destination_names = get_route(home, dest, token)
 
     colour = ""
 
